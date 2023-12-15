@@ -6,7 +6,7 @@ import { connect } from "@/dbConfig/dbConfig";
 
 connect();
 
-export async function GET(request:NextRequest){
+export async function GET(request){
 
     try {
         const userId = await getDataFromToken(request);
@@ -15,7 +15,7 @@ export async function GET(request:NextRequest){
             mesaaage: "User found",
             data: user
         })
-    } catch (error:any) {
+    } catch (error) {
         return NextResponse.json({error: error.message}, {status: 400});
     }
 

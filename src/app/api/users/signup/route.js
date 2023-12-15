@@ -8,7 +8,7 @@ import { sendEmail } from "@/helpers/mailer";
 connect()
 
 
-export async function POST(request: NextRequest){
+export async function POST(request){
     try {
         const reqBody = await request.json()
         const {username, email, password} = reqBody
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest){
         
 
 
-    } catch (error: any) {
+    } catch (error) {
         return NextResponse.json({error: error.message}, {status: 500})
 
     }
