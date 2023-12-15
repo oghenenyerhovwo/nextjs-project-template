@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
-import { sendEmail } from "@/helpers/mailer";
+
+import { 
+    sendConfirmationEmail,
+ } from "@/helpers"
 
 
 import {
@@ -43,7 +46,7 @@ export async function POST(request){
 
         //send verification email
 
-        await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
+        await sendConfirmationEmail("emakuneyi2016@gmail.com", "Yaro")
 
         return NextResponse.json({
             message: "User created successfully",

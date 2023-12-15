@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { 
-    sendConfirmationEmail,
- } from "@/helpers"
 
 import {
   User,
@@ -56,7 +53,6 @@ export async function POST(request){
             
         // })
         console.log("logging in")
-        sendConfirmationEmail("emakuneyi2016@gmail.com", "Yaro")
         return response;
 
     } catch (error) {
