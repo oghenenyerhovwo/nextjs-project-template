@@ -1,10 +1,16 @@
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 import { NextRequest, NextResponse } from "next/server";
-import User from "@/models/userModel";
-import { connect } from "@/dbConfig/dbConfig";
 
-connect();
+import {
+  User,
+} from "@/models";
+
+import {
+  databaseConnection,
+} from '@/config';
+
+databaseConnection()
 
 export async function GET(request){
 

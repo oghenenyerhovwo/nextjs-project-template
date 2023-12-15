@@ -1,4 +1,3 @@
-import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -7,9 +6,13 @@ import {
     sendConfirmationEmail,
  } from "@/helpers"
 
- import {
-    databaseConnection,
-} from "@/config";
+import {
+  User,
+} from "@/models";
+
+import {
+  databaseConnection,
+} from '@/config';
 
 databaseConnection()
 

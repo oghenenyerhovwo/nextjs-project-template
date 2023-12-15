@@ -1,11 +1,14 @@
-import {connect} from "@/dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
-import User from "@/models/userModel";
 
+import {
+  User,
+} from "@/models";
 
+import {
+  databaseConnection,
+} from '@/config';
 
-connect()
-
+databaseConnection()
 
 export async function POST(request){
 
