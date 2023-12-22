@@ -1,8 +1,10 @@
 import "./globals.css";
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 import {
   Nav,
-  Provider,
+  ReduxProvider,
 } from "@/components/";
 
 export const metadata = {
@@ -13,16 +15,18 @@ export const metadata = {
 const RootLayout = ({ children }) => (
   <html lang='en'>
     <body>
-      <Provider>
-        <div className='main'>
-          <div className='gradient' />
-        </div>
+      <ReduxProvider>
+        <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_ID}>
+          <div className='main'>
+            <div className='gradient' />
+          </div>
 
-        <main className='app'>
-          <Nav />
-          {children}
-        </main>
-      </Provider>
+          <main className='app'>
+            <Nav />
+            {children}
+          </main>
+        </GoogleOAuthProvider>
+      </ReduxProvider>
     </body>
   </html>
 );

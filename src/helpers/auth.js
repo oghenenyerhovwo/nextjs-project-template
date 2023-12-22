@@ -5,7 +5,6 @@ export const generateToken= async (user, time) => {
     const token=  jwt.sign({
       _id: user._id,
       email: user.email,
-      role:  user.role,
     },
     process.env.JWT_SECRET, 
     {
@@ -17,4 +16,14 @@ export const generateToken= async (user, time) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+export const getUserDataFromToken = (request) => {
+    try {
+        const token = request.cookies.get("token")?.value || '';
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        return decodedToken._id;
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }

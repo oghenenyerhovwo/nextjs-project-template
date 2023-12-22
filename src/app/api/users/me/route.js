@@ -1,5 +1,3 @@
-import { getDataFromToken } from "@/helpers/getDataFromToken";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import {
@@ -10,15 +8,17 @@ import {
   databaseConnection,
 } from '@/config';
 
+import { getUserDataFromToken } from "@/helpers/";
+
 databaseConnection()
 
 export async function GET(request){
 
     try {
-        const userId = await getDataFromToken(request);
+        const userId = await getUserDataFromToken(request);
         const user = await User.findOne({_id: userId}).select("-password");
         return NextResponse.json({
-            mesaaage: "User found",
+            message: "User found",
             data: user
         })
     } catch (error) {

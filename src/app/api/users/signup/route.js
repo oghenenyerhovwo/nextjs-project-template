@@ -22,8 +22,6 @@ export async function POST(request){
         const reqBody = await request.json()
         const {username, email, password} = reqBody
 
-        console.log(reqBody);
-
         //check if user already exists
         const user = await User.findOne({email})
 
@@ -42,16 +40,15 @@ export async function POST(request){
         })
 
         const savedUser = await newUser.save()
-        console.log(savedUser);
 
         //send verification email
 
-        await sendConfirmationEmail("emakuneyi2016@gmail.com", "Yaro")
+        await sendConfirmationEmail(savedUser.email, savedUser.username)
 
         return NextResponse.json({
             message: "User created successfully",
             success: true,
-            savedUser
+            user: savedUser,
         })
         
         

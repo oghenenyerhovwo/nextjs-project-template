@@ -6,8 +6,12 @@ import axios from "axios";
 import { ref, uploadBytesResumable, getDownloadURL, } from "firebase/storage"
 import firebaseStorage from "@/helpers/storage"
 import { toast } from "react-hot-toast";
+import { googleLogout } from '@react-oauth/google';
 
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import {
+    OneTapGoogle,
+    Google,
+} from "@/components"
 
 
 export default function LoginPage() {
@@ -18,17 +22,9 @@ export default function LoginPage() {
        
     })
 
-    const { data: session } = useSession();
-    const [providers, setProviders] = useState(null);
     const [buttonDisabled, setButtonDisabled] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-
-    useEffect(() => {
-        (async () => {
-            const res = await getProviders();
-            setProviders(res);
-        })();
-    }, []);
+    const [message, setMessage] = React.useState("");
 
     useEffect(() => {
         if(user.email.length > 0 && user.password.length > 0) {
@@ -42,15 +38,34 @@ export default function LoginPage() {
         try {
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
-            console.log("Login success", response.data);
+            setMessage(response.message)
             toast.success("Login success");
             router.push("/profile");
         } catch (error) {
             console.log("Login failed", error.message);
             toast.error(error.message);
         } finally{
+            setLoading(false);
+        }
+    }
+
+    const onLogout = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get("/api/users/logout");
+            console.log(response)
+            setMessage(response.message)
+            toast.success("Login success");
+        } catch (error) {
+            console.log("Login failed", error.message);
+            toast.error(error.message);
+        } finally{
         setLoading(false);
         }
+    }
+
+    const onLogoutGoogle = () => {
+        setMessage("Google logged out")
     }
 
     const handleSingleFileChange = async (e) => {
@@ -75,7 +90,8 @@ export default function LoginPage() {
                     async () => {
                         // download url
                         await getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                            console.log(url)                        
+                            console.log(url) 
+                            setMessage(url)                       
                         });
                     }
                 )
@@ -88,9 +104,9 @@ export default function LoginPage() {
     return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
         <h1>{loading ? "Processing" : "Login"}</h1>
-        <hr />
         
         <label htmlFor="email">email</label>
+        <p>{message} </p>
         <input 
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
             id="email"
@@ -117,25 +133,9 @@ export default function LoginPage() {
             onClick={onLogin}
             className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">Login here
         </button>
-        <div>{session && session.user && session.user.email} </div>
-        <>
-            <div className=''>
-                {providers &&
-                Object.values(providers).map((provider) => {
-                    const handleProviderSignIn = () => signIn(provider.id)
-                    return (
-                        <button
-                            type='button'
-                            key={provider.name}
-                            onClick={handleProviderSignIn}
-                            className='"p-2 border border-gray-300'
-                        >
-                            Sign in with {provider.name}
-                        </button>
-                    )
-                })}
-            </div>
-          </>
+        <OneTapGoogle setMessage={setMessage} />
+        <button onClick={googleLogout}>Log Google user out</button>
+        <Google setMessage={setMessage} />
             <Link href="/signup">Visit Signup page</Link>
         </div>
     )
